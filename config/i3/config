@@ -24,7 +24,6 @@ bindsym $mod+Tab		workspace back_and_forth
 
 # Program Launchers
 bindsym $mod+space		exec --no-startup-id "rofi -theme ~/.happy-desktop/config/rofi/happy-theme.rasi -lines 5 -show run -modi run -display-run 'λ' -fullscreen -bw 0 -separator-style none -hide-scrollbar -kb-row-select 'Tab' -kb-row-tab ''"
-bindsym $mod+r 			exec $term -e ranger
 bindsym $mod+i 			exec $term -e htop
 bindsym $mod+BackSpace      exec i3-msg reload ; exec i3-msg restart ;
 bindsym $mod+Shift+BackSpace	exec ~/.happy-desktop/bin/prompt "Are you sure you want to reboot?" "sudo reboot"
