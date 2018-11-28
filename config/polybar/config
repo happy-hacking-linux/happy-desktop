@@ -60,7 +60,7 @@ font-2 = Wuncon Siji:pixelsize=9;1
 modules-left = i3
 #modules-center = mpd
 #modules-right = volume wlan battery temperature date
-modules-right = volume network battery cpu memory pomo date
+modules-right = volume network battery cpu memory date
 
 tray-position = right
 tray-padding = 0
@@ -409,7 +409,7 @@ exec = ~/.config/polybar/network.sh
 
 [module/pomo]
 type = custom/script
-exec = ~/localbin/pomo/pomo.sh clock
+exec = ~/.happy-desktop/bin/pomo/pomo.sh clock
 tinterval = 1
 format-prefix-foreground = ${colors.foreground-alt}
 format-underline = ${xrdb:color7}

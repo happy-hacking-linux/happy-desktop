@@ -100,6 +100,3 @@ URxvt.pointerColorForeground:  #93a1a1
 *color13:                 #6c71c4
 *color14:                 #93a1a1
 *color15:                 #fdf6e3
-
-rofi.color-window: argb:EE000000, argb:EE000000, argb:EE000000
-rofi.color-normal: argb:00000000, #DEDEDE, argb:00000000, #DEDEDE

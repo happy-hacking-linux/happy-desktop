@@ -6,4 +6,5 @@ xset -r 135
 feh --bg-fill ~/.happy-desktop/wallpaper.jpg
 synclient CoastingSpeed=3
 xmodmap .xmodmap
+udiskie &
 exec i3 --shmlog-size=26214400
