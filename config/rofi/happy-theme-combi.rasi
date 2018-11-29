@@ -13,7 +13,7 @@
 #window {
   location: center;
   anchor: center;
-  padding: 450;
+  padding: 50;
   background-color: @black;
 }
 
