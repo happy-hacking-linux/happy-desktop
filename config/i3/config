@@ -10,8 +10,12 @@ set $hibernate sudo systemctl suspend
 # Exec on start
 exec --no-startup-id "compton --config ~/.compton.conf -b -c -f"
 exec --no-startup-id ~/.happy-desktop/config/polybar/launch.sh
+exec --no-startup-id nm-applet
 exec_always --no-startup-id polybar-reload
 exec --no-startup-id dunst
+exec --no-startup-id mons -a &
+exec --no-startup-id rescuetime &
+exec --no-startup-id /usr/bin/blueman-applet
 
 # Basic bindings
 bindsym $mod+Return 		exec $term
@@ -33,6 +37,8 @@ bindsym $mod+Shift+x		exec ~/.happy-desktop/bin/prompt "Are you sure you want to
 bindsym $mod+v 			exec ~/.happy-desktop/bin/screenshot
 bindsym $mod+Shift+v 		exec ~/.happy-desktop/bin/screenshot -s
 bindsym $mod+Shift+r 			exec ~/.happy-desktop/bin/screencast
+bindsym $mod+o 			exec ~/localbin/configure-display
+bindsym $mod+w 			exec sudo ~/.happy-desktop/bin/distractions toggle -f ~/.distractions
 
 # feh should be floating
 for_window [class="feh"] floating enable
@@ -47,13 +53,22 @@ for_window [instance="^scratch_console$"] border pixel 0
 bindsym $mod+t			[instance="^scratch_console$"] scratchpad show; [instance="^scratch_console$"] move position center
 exec_always --no-startup-id $term -name scratch_console -e $SHELL -c "tmux attach-session -t console || tmux new-session -s console"
 
+# Calendar
+for_window [instance="^california$"] floating enable
+for_window [instance="^california$"] resize set 1000 600
+for_window [instance="^california$"] move scratchpad
+for_window [instance="^california$"] border pixel 0
+
+bindsym $mod+c			[instance="^california$"] scratchpad show; [instance="^california$"] move position center
+exec_always --no-startup-id california &
+
 # Calculator
 for_window [instance="^qalculate-gtk$"] floating enable
 for_window [instance="^qalculate-gtk$"] resize set 1000 600
 for_window [instance="^qalculate-gtk$"] move scratchpad
 for_window [instance="^qalculate-gtk$"] border pixel 0
 
-bindsym $mod+c			[instance="^qalculate-gtk"] scratchpad show; [instance="^qalculate-gtk"] move position center
+bindsym $mod+Shift+c			[instance="^qalculate-gtk"] scratchpad show; [instance="^qalculate-gtk"] move position center
 exec_always --no-startup-id qalculate-gtk
 
 # Network bindings

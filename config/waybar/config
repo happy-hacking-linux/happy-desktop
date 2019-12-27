@@ -1,0 +1,78 @@
+{
+  "layer": "top",
+  "position": "top",
+  "modules-left": [ "sway/workspaces" ],
+  "modules-center": [ "sway/window" ],
+  "modules-right": [ "custom/displays", "pulseaudio", "custom/network", "cpu", "memory", "battery", "clock", "custom/pomodoro", "tray"],
+  "sway/workspaces": {
+    "format-icons": {
+      "1": "",
+      "2": "",
+      "3": ""
+    }
+  },
+  "tray": {
+    "spacing": 10
+  },
+  "cpu": {
+    "format": "{usage}% "
+  },
+  "memory": {
+    "format": "{}% "
+  },
+  "battery": {
+    "states": {
+      "good": 95,
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{capacity}% {icon}",
+    // "format-good": "", // An empty format will hide the module
+    // "format-full": "",
+    "format-icons": ["", "", "", "", ""]
+  },
+  "network": {
+    "format-wifi": "",
+    "format-ethernet": "{ifname}: {ipaddr}/{cidr} ",
+    "format-disconnected": "Offline"
+  },
+  "pulseaudio": {
+    //"scroll-step": 1,
+    "format": "{icon}",
+    "format-bluetooth": "{icon}",
+    "format-muted": "",
+    "format-icons": {
+      "headphones": [" ", " "],
+      "handsfree": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": ["", ""]
+    },
+    "on-click": "pavucontrol"
+  },
+  "custom/network": {
+    "format": "{}",
+    "max-length": 40,
+    "interval": 3,
+    "return-type": "json",
+    "exec": "$HOME/.config/waybar/network.sh 2> /dev/null"
+  },
+  "custom/pomodoro": {
+    "format": "{}",
+    "max-length": 40,
+    "interval": 3,
+    "return-type": "text",
+    "exec": "$HOME/.happy-desktop/bin/distractions clock",
+    "on-click": "$HOME/.happy-desktop/bin/pomodoro-menu.sh"
+  },
+  "custom/displays": {
+    "format": "{}",
+    "max-length": 40,
+    "interval": 3,
+    "return-type": "text",
+    "exec": "$HOME/.happy-desktop/bin/displays icon",
+    "on-click": "$HOME/.happy-desktop/bin/displays menu"
+  }
+}

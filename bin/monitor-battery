@@ -28,11 +28,19 @@ checkBatteryLevel() {
 }
 
 checkBatteryStateChange() {
-    if [ "$battery_state" != "Discharging" ] && [ "$battery_state" != "${previous_battery_state}" ]; then
+    echo "Check battery: ${battery_state} / ${battery_level}"
+
+    if [ "${battery_level}" -gt 97 ]; then
+        exit
+    fi
+
+    if [ "$battery_state" == "Charging" ] && [ "$previous_battery_state" == "Discharging" ]; then
+        echo "Now charging"
         notify-send "Charging" "Battery is now plugged in." -u low
     fi
 
-    if [ "$battery_state" == "Discharging" ] && [ "$battery_state" != "${previous_battery_state}" ]; then
+    if [ "$battery_state" == "Discharging" ] && [ "$previous_battery_state" == "Charging" ]; then
+        echo "Now discharging"
         notify-send "Power Unplugged" "Your computer has been disconnected from power." -u low
     fi
 }

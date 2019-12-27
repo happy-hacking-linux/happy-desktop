@@ -1,0 +1,183 @@
+* {
+  border: none;
+  border-radius: 0;
+  font-family: "Dejavu Sans Mono", Monaco, Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  min-height: 0;
+}
+
+window#waybar {
+  background: rgba(43, 48, 59, 0.5);
+  border-bottom: 3px solid rgba(100, 114, 125, 0.5);
+  color: #ffffff;
+}
+
+#workspaces button {
+    padding: 0 5px;
+    background: transparent;
+    color: #ffffff;
+    border-bottom: 3px solid transparent;
+}
+
+#workspaces button.focused {
+    background: #64727D;
+    border-bottom: 3px solid #ffffff;
+}
+
+#mode {
+    background: #64727D;
+    border-bottom: 3px solid #ffffff;
+}
+
+#clock,
+#battery,
+#cpu,
+#memory,
+#temperature,
+#backlight,
+#network,
+#pulseaudio,
+#custom-spotify,
+#tray,
+#mode,
+#idle_inhibitor {
+    padding: 0;
+    margin: 0 1rem;
+    border-bottom: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+#pulseaudio {
+  border-color: rgba(254, 205, 109, 0.8);
+  font-size: 1.5em;
+}
+
+#cpu {
+  border-color: rgba(239, 123, 136, 0.8);
+}
+
+#memory {
+  border-color: rgba(172, 218, 207, 0.8);
+}
+
+#clock {
+  border-color: rgba(0, 196, 126, 0.8);
+}
+
+#custom-network.network-status {
+  font-size: 1.5rem;
+  border-bottom: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+#custom-network.network-activity {
+  border-bottom: 3px solid rgba(255, 255, 255, 0.6);
+}
+
+#custom-network.network-activity-high {
+  border-bottom: 3px solid rgba(255, 0, 0, 0.6);
+}
+
+#custom-network.network-activity-upper-medium {
+  border-bottom: 3px solid rgba(255, 65, 122, 0.6);
+}
+
+#custom-network.network-activity-lower-medium {
+  border-bottom: 3px solid rgba(255, 157, 66, 0.6);
+}
+
+#custom-network.network-activity-low {
+  border-bottom: 3px solid rgba(238, 238, 102, 0.6);
+}
+
+@keyframes blink {
+  to {
+    background-color: #ffffff;
+    color: #000000;
+  }
+}
+
+#battery.critical:not(.charging) {
+  background: #f53c3c;
+  color: #ffffff;
+  animation-name: blink;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+#custom-pomodoro {
+  border-bottom: 3px solid rgba(255, 157, 66, 0.6);
+}
+
+#custom-pomodoro.pomodoro-break-mode {
+  border-bottom: 3px solid rgba(0, 196, 126, 0.8);
+}
+
+#custom-pomodoro.pomodoro-work-mode {
+  border-bottom: 3px solid rgba(238, 238, 102, 0.6);
+}
+
+/*
+#clock {
+    background-color: #64727D;
+}
+
+
+
+#cpu {
+    background: #2ecc71;
+    color: #000000;
+}
+
+#memory {
+    background: #9b59b6;
+}
+
+#backlight {
+    background: #90b1b1;
+}
+
+#network {
+    background: #2980b9;
+}
+
+#network.disconnected {
+    background: #f53c3c;
+}
+
+#pulseaudio {
+    background: #f1c40f;
+    color: #000000;
+}
+
+#pulseaudio.muted {
+    background: #90b1b1;
+    color: #2a5c45;
+}
+
+#custom-spotify {
+    background: #66cc99;
+    color: #2a5c45;
+}
+
+#temperature {
+    background: #f0932b;
+}
+
+#temperature.critical {
+    background: #eb4d4b;
+}
+
+#tray {
+    background-color: #2980b9;
+}
+
+#idle_inhibitor {
+    background-color: #2d3436;
+}
+
+#idle_inhibitor.activated {
+    background-color: #ecf0f1;
+    color: #2d3436;
+}
+*/

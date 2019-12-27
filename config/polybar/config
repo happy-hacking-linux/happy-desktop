@@ -28,7 +28,7 @@ col = #00f
 enable-ipc = true
 
 ;monitor = ${env:MONITOR:HDMI-1}
-;monitor = ${env:MONITOR}
+monitor = ${env:MONITOR:}
 ;monitor = ${env:MONITOR:LVDS-1}
 width = 100%
 height = 24
@@ -60,7 +60,7 @@ font-2 = Wuncon Siji:pixelsize=9;1
 modules-left = i3
 #modules-center = mpd
 #modules-right = volume wlan battery temperature date
-modules-right = volume network battery cpu memory date
+modules-right = pomo volume network battery cpu memory date
 
 tray-position = right
 tray-padding = 0
@@ -410,7 +410,10 @@ exec = ~/.config/polybar/network.sh
 [module/pomo]
 type = custom/script
 exec = ~/.happy-desktop/bin/pomo/pomo.sh clock
-tinterval = 1
+click-left = ~/.happy-desktop/bin/pomo/pomo.sh start
+click-right = ~/.happy-desktop/bin/pomo/pomo.sh pause
+double-click-left = ~/.happy-desktop/bin/pomo/pomo.sh restart
+interval = 5
 format-prefix-foreground = ${colors.foreground-alt}
 format-underline = ${xrdb:color7}
 

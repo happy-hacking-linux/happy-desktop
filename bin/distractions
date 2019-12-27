@@ -1,0 +1,262 @@
+#!/bin/bash
+
+task=$1
+
+# Convert all parameters to variables
+while [ $# -gt 0 ]; do
+    if [[ ${1:0:2} == "--" ]]; then
+        v="${1/--/}"
+        v="${v/-/_}"
+        declare $v="$2"
+        declare $v"_enabled"="1"
+    elif [[ ${1:0:1} == "-" ]]; then
+        v="${1/-/}"
+        v="${v/-/_}"
+        declare $v="$2"
+        declare $v"_enabled"="1"
+    fi
+    shift
+done
+
+distractionsFile=${file:-$f}
+hostsFile=/etc/hosts
+sessionFile=/tmp/distractions-session
+pomodoroWorkTime=${work_time:-25m}
+pomodoroBreakTime=${break_time:-5m}
+
+background() {
+    trap turnOn USR1
+    trap turnOff USR2
+
+    echo "Starting distractions as a background service. Send following signals to control:"
+    echo "  USR1: Turn on"
+    echo "  USR2: Turn off"
+
+    while true; do
+	      sleep 1
+    done
+}
+
+findBackgroundProcessPid() {
+    result=$(ps -aux | grep -m 1 "distractions background" | awk '{print $2}')
+    echo $result
+    return $result
+}
+
+callTurnOn() {
+    echo "Turning on distractions..."
+    pid=$(findBackgroundProcessPid)
+
+    if [[ -z "${pid// }" ]]; then
+        echo "Can't find background process to signal. Please make sure `distractions background` is running."
+        exit 0
+    fi
+
+    sudo kill -USR1 $pid
+}
+
+callTurnOff() {
+    pid=$(findBackgroundProcessPid)
+
+    if [[ -z "${pid// }" ]]; then
+        echo "Can't find background process to signal. Please make sure 'distractions background' is running."
+        exit 1
+    fi
+
+    echo "Turning off distractions"
+    sudo kill -USR2 $pid
+}
+
+turnOff() {
+    if [ ! -f $distractionsFile ]; then
+        echo "$distractionsFile does not exist"
+        exit 1
+    fi
+
+    hostnames=$(cat $distractionsFile | sed -e 's/^/127.0.0.1 /')
+    hostnamesWithWWW=$(cat $distractionsFile | sed -e 's/^/127.0.0.1 www./')
+
+    if isOn; then
+        echo "" >> $hostsFile
+        echo "# <distractions>" >> $hostsFile
+        echo -e "${hostnames}" >> $hostsFile
+        echo -e "${hostnamesWithWWW}" >> $hostsFile
+        echo "# </distractions>" >> $hostsFile
+    fi
+
+    touch $sessionFile
+}
+
+turnOn() {
+    if ! isOn; then
+        sed -i '/# <distractions>/,/# <\/distractions>/d' $hostsFile
+        sed -i -e :a -e '/^\n*$/{$d;N;};/\n$/ba' $hostsFile
+    fi
+
+    touch $sessionFile
+}
+
+toggle() {
+    if ! isOn; then
+        turnOn
+    else
+        turnOff
+    fi
+}
+
+status() {
+    if isOn; then
+        echo "on"
+    else
+        echo "off"
+    fi
+}
+
+clock() {
+    if [ $json_enabled ]; then
+        jsonClock
+        exit 1
+    fi
+
+    if [ $relative_enabled ]; then
+        relativeClock
+        exit 1
+    fi
+
+    label="Work"
+    if isOn; then
+        label="Break"
+    fi
+
+    hours=`printf "%02d" $(hoursAgo)`
+    minutes=`printf "%02d" $(minutesAgo)`
+    echo "$hours:$minutes $label"
+}
+
+jsonClock() {
+    label="Work"
+    class="pomodoro-work-mode"
+    if isOn; then
+        label="Break"
+        class="pomodoro-break-mode"
+    fi
+
+    hours=`printf "%02d" $(hoursAgo)`
+    minutes=`printf "%02d" $(minutesAgo)`
+    echo "{ \"text\": \"$hours:$minutes $label\", \"class\": \"$class\" }"
+}
+
+relativeClock() {
+    relativeTime=$(minutesAgo)" minutes"
+
+    if [[ $(hoursAgo) -gt 0 ]]; then
+        relativeTime=$(hoursAgo)" hours"
+    fi
+
+    echo $relativeTime
+}
+
+pomodoro() {
+    echo "Starting Pomodoro."
+
+    while true; do
+        startWork
+        startBreak
+    done
+
+    echo "Stopping Pomodoro mode."
+}
+
+startWork() {
+    echo "Starting work-mode."
+    callTurnOff
+
+    if [[ -n "${on_work// }" ]]; then
+        if [ -f $on_work ]; then
+            sh $on_work $pomodoroWorkTime
+        fi
+    fi
+
+    sleep $pomodoroWorkTime
+}
+
+startBreak() {
+    echo "Starting break"
+    callTurnOn
+
+    if [[ -n "${on_break// }" ]]; then
+        if [ -f $on_break ]; then
+            sh $on_break $pomodoroBreakTime
+        fi
+    fi
+
+    sleep $pomodoroBreakTime
+}
+
+checkSessionFile() {
+    if [ ! -f $sessionFile ]; then
+        touch $sessionFile
+    fi
+}
+
+hoursAgo() {
+    checkSessionFile;
+    result=$((($(date +%s) - $(date -r $sessionFile +%s))/(60*60)))
+    echo $result
+    return $result
+}
+
+minutesAgo() {
+    checkSessionFile;
+    result=$((($(date +%s) - $(date -r $sessionFile +%s))/(60)%60))
+    echo $result
+    return $result
+}
+
+isOn() {
+    if grep -q "# <distractions>" $hostsFile; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+if [[ $task == "on" ]]; then
+    callTurnOn
+elif [[ $task == "off" ]]; then
+    callTurnOff
+elif [[ $task == "toggle" ]]; then
+    toggle
+elif [[ $task == "status" ]]; then
+    status
+elif [[ $task == "clock" ]]; then
+    clock
+elif [[ $task == "pomodoro" ]]; then
+    pomodoro
+elif [[ $task == "background" ]]; then
+    background
+else
+    echo ""
+    echo "SYNOPSIS"
+    echo "    distractions [on|off|toggle|status|background|clock|pomodoro]"
+    echo
+    echo "OPTIONS"
+    echo "       -f --file"
+    echo "        Path to the distractions file. Needed for 'off' command"
+    echo "       --work-time"
+    echo "        Work time for pomodoro mode. Example values: '20m' '1h'. Default: 25m."
+    echo "       --break-time"
+    echo "        Break time for pomodoro mode. Example values: 20m, 3m. Default: 5m"
+    echo "       --on-work"
+    echo "        Execute given script on starting to work"
+    echo "       --on-break"
+    echo "        Execute given script on break"
+    echo "       --json"
+    echo "        Format output as JSON. (Only implemented for clock command)"
+    echo "       --relative"
+    echo "        Format output as relative time. (Only implemented for clock command)"
+    echo ""
+    echo "    -h --help"
+    echo "        Show help"
+    echo
+fi

@@ -10,9 +10,16 @@ while pgrep -x polybar >/dev/null; do sleep 1; done
 # Launch bar1 and bar2
 #polybar example &
 
-polybar work
+# polybar work
 
-#for i in $(polybar -m | awk -F: '{print $1}'); do MONITOR=$i polybar example -c ~/.config/polybar/config & done
+if type "xrandr"; then
+  for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
+    MONITOR=$m polybar --reload work &
+  done
+else
+  polybar --reload work &
+fi
+
 #feh --bg-scale ~/wallpaper.jpg
 
 #echo "Bars launched..."

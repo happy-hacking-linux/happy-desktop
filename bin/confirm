@@ -1,0 +1,1 @@
+[ $(./prompt -o "No,Yes" -q $1) == "Yes" ] && $2

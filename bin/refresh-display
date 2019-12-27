@@ -1,0 +1,7 @@
+displays detect
+sway-msg reload
+sway-msg restart
+killall waybar 2> /dev/null
+waybar &
+sway output "*" background /home/azer/.happy-desktop/wallpaper.jpg fill
+notify-send 'Refreshed' "The display has been refreshed successfully." -u low

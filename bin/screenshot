@@ -1,3 +1,0 @@
-mkdir -p ~/Screenshots
-maim $@ > ~/Screenshots/`date +%Y-%m-%d.%H:%M:%S`.png
-notify-send 'New Screenshot' 'Saved to ~/Screenshots folder.' -u low
