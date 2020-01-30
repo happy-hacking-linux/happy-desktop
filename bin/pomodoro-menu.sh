@@ -19,6 +19,8 @@ else
     menu="$menu, start"
 fi
 
+echo "$distractions_status"
+
 if [ $distractions_status == "on" ]; then
     menu="$menu, turn off distractions"
 else

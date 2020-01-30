@@ -31,13 +31,15 @@ bindsym $mod+Tab		workspace back_and_forth
 bindsym $mod+Shift+space		exec --no-startup-id "rofi -theme ~/.happy-desktop/config/rofi/happy-theme.rasi -lines 5 -show run -modi run -display-run 'λ' -fullscreen -bw 0 -separator-style none -hide-scrollbar -kb-row-select 'Tab' -kb-row-tab ''"
 bindsym Mod1+Tab  exec --no-startup-id "rofi -theme ~/.happy-desktop/config/rofi/happy-theme-combi.rasi -modi combi -combi-modi window -show combi -display-run 'λ'"
 bindsym $mod+Shift+BackSpace  exec --no-startup-id "~/.happy-desktop/bin/refresh-display > /tmp/ref"
-bindsym $mod+space	exec ~/.happy-desktop/bin/session.sh
+bindsym $mod+BackSpace	exec ~/.happy-desktop/bin/session.sh
+bindsym $mod+space	exec ~/localbin/work-menu.sh
 bindsym $mod+v 			exec ~/.happy-desktop/bin/capture-screen.sh
-bindsym $mod+g 			exec ~/.happy-desktop/bin/open-url
-bindsym $mod+shift+g 			exec ~/.happy-desktop/bin/open-search
-bindsym $mod+p	exec ~/.happy-desktop/bin/dictionary
+#bindsym $mod+o 			exec ~/localbin/setup-displays
+bindsym $mod+g 			exec ~/localbin/open-url
+bindsym $mod+shift+g 			exec ~/localbin/open-search
+bindsym $mod+p	exec ~/localbin/dictionary
 bindsym $mod+n	exec alacritty --class "floating" -e nmtui connect
-bindsym $mod+shift+p	exec ~/.happy-desktop/bin/pronounce
+bindsym $mod+shift+p	exec ~/localbin/pronounce
 
 # Layouts
 bindsym $mod+w layout tabbed
